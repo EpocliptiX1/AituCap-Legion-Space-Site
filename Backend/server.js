@@ -4,9 +4,8 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
-
-const app = express();
 const YT_API_KEY = 'AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwH2fqak';
+const app = express();
 
 // --- 1. MIDDLEWARE ---
 app.use(cors());
