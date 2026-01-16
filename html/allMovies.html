@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Movies | Legion Space Library</title>
+    <link rel="stylesheet" href="/css/style.css">
+ 
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="/img/LOGO.png" alt="Logo" class="logo-img">
+            <img src="/img/LOGO_Short.png" alt="Logo" class="logo-img logo-imgS">
+        </div>
+
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="/html/indexMain.html" class="myNavLink">Home</a></li>
+            <li><a href="/html/allMovies.html" class="myNavLink">Movies</a></li>
+            <li><a href="personalList.html" class="myNavLink noborder">My List</a></li>
+        </ul>       
+
+        
+            
+            <div class="nav-tools">
+                <div class="search-wrapper">
+                    <div class="search-box">
+                        <input type="text" id="mainSearch" placeholder="Titles, people, genres..." autocomplete="off">
+                    </div>
+                    <div class="search-results-menu" id="searchResults"></div>
+        </div>
+
+        <div class="account-trigger" onclick="toggleAccountMenu()">
+        <div class="grey-profile-pic"></div>
+            
+            <span id="navUsername">Guest</span>
+            
+            <div class="account-dropdown" id="accountDropdown">
+                <div class="dropdown-header">
+                    <p id="dropTier" class="tier-badge">Free Tier</p>
+                </div>
+                <div class="dropdown-stats">
+                    <div class="stat-line">
+                        <span>Searches:</span>
+                        <span id="statSearch">0/5</span>
+                    </div>
+                    <div class="stat-line">
+                        <span>Views:</span>
+                        <span id="statView">0/3</span>
+                    </div>
+                </div>
+                <hr>
+                <a href="#" class="drop-link" onclick="openSettings()">Settings</a>
+                <a href="#" class="drop-link" onclick="logout()">Logout</a>
+        </div>
+    </div>
+        </div>
+    </nav>
+
+    <div class="container list-wrapper" style="padding: 100px 4% 50px; padding-top: 50px;">
+    
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 class="list-title">Movie Library</h2>
+            <button id="filterToggle" class="filter-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3M1 14h6m2-6h6m2 8h6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Filters
+            </button>
+        </div>
+
+        <div id="filterPanel" class="filter-panel">
+            <div class="filter-grid">
+                
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select id="sortBy" class="filter-input">
+                        <option value="rating_desc">⭐ Highest Rated</option>
+                        <option value="date_desc">📅 Newest First</option>
+                        <option value="duration_desc">⏳ Longest Duration</option>
+                        <option value="success_desc">💰 Most Successful</option>
+                        <option value="success_asc">💸 Least Successful (Flops)</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Released After: <span id="yearValue" style="color:#f96d00">1930</span></label>
+                    <input type="range" id="yearSlider" min="1930" max="2025" value="1930" class="orange-slider">
+                </div>
+
+                <div class="filter-group">
+                    <label>All Visual Styles</label>
+                    <select id="genreInput" class="filter-input">
+                        <option value="">All Visual Styles</option>
+                        <option value="Action">Visually Intense (High Contrast)</option>
+                        <option value="Adventure">Epic Landscapes & Journeys</option>
+                        <option value="Animation">Vibrant Stylized Worlds</option>
+                        <option value="Comedy">Light & High-Key Palette</option>
+                        <option value="Crime">Gritty & Low-Light (Noir)</option>
+                        <option value="Drama">Emotional / Human Experience</option>
+                        <option value="Fantasy">Whimsical & Surreal Frames</option>
+                        <option value="Horror">Atmospheric & Chilling Shadows</option>
+                        <option value="Sci-Fi">Futuristic / Neon Aesthetic</option>
+                        <option value="Thriller">Tense & Dynamic Framing</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Actor</label>
+                    <input type="text" id="actorInput" placeholder="e.g. Brad Pitt" class="filter-input">
+                </div>
+
+                <div class="filter-group">
+                    <label>Director</label>
+                    <input type="text" id="directorInput" placeholder="e.g. Nolan" class="filter-input">
+                </div>
+
+                <div class="filter-group">
+                    <label style="visibility: hidden;">Spacer</label> 
+                    <button id="applyFilters" class="apply-btn">Apply Filters</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="netflix-grid" id="libraryGrid">
+            </div>
+    </div>
+    <footer class="container site-footer">
+        <div class="footer-content">
+            
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>Legion<span>Space</span></h3>
+                    <p class="footer-desc">
+                        The premium destination for cinema lovers in Astana. 
+                        From Kazakh masterpieces to global blockbusters, 
+                        we stream it all.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-btn" title="Instagram">
+                            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#" class="social-btn" title="YouTube">
+                            <svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                        </a>
+                        <a href="#" class="social-btn" title="Telegram">
+                            <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Browse</h4>
+                    <ul>
+                        <li><a href="indexMain.html">Home</a></li>
+                        <li><a href="allMovies.html">Movies Library</a></li>
+                        <li><a href="personalList.html">My List</a></li>
+                        <li><a href="indexMain.html#heroSection">Featured</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="mailto:legionspacehelpline@gmail.com">Help Center</a></li>
+                        <li><a href="mailto:legionspacehelpline@gmail.com">Request a Movie</a></li>
+                        <li><a href="indexMain.html#aboutSection">Supported Devices</a></li>
+                        <li><a href="mailto:legionspacehelpline@gmail.com">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Account</h4>
+                    <ul>
+                        <li><a href="personalList.html">Manage Lists</a></li>
+                        <li><a onclick="logout()" href="indexMain.html#subSec" >Subscription</a></li>
+                        <li><a href="#">Redeem Gift</a></li>
+                        <li><a href="#" onclick="logout()">Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Legion Space Cinema. All rights reserved.</p>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Cookie Preferences</a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+    <div id="notification-toast" class="toast-hidden"></div>
+          <div id="signupModal" class="signup-overlay">
+        <div class="signup-box">
+            <div class="signup-close" onclick="closeSignupModal()">✕</div>
+            
+            <h2>Welcome to Legion Space</h2>
+            <p class="signup-subtitle">Create your free account to start watching.</p>
+            
+            <form onsubmit="handleSignup(event)">
+                <div class="input-group">
+                    <input type="text" id="signupUser" required placeholder=" ">
+                    <label>Username</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="signupEmail" required placeholder=" ">
+                    <label>Email Address</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" required placeholder=" ">
+                    <label>Password</label>
+                </div>
+                <div class="input-group">
+                    <select id="signupTier" class="styled-select" style="width: 100%; margin-top: 10px;">
+                        <option value="Free">Free (5 Searches / 3 Views)</option>
+                        <option value="Premium">Premium (50 Searches / 20 Views)</option>
+                        <option value="Gold">Gold (Unlimited)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-signup">Create Account</button>
+                
+                <div class="divider">OR</div>
+                
+                <button type="button" class="btn-google">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z" fill="currentColor"/></svg>
+                    Continue with Google
+                </button>
+            </form>
+        </div>
+    </div>
+    <div id="settingsModal" class="settings-modal-overlay">
+        <div class="settings-content">
+            <span class="close-settings" onclick="closeSettings()">&times;</span>
+            <h2>Settings</h2>
+            <div class="settings-grid">
+                <div class="settings-section">
+                    <h3>Account Details</h3>
+                    <div class="setting-item">
+                        <label>Username</label>
+                        <input type="text" id="settingsUsername" placeholder="Enter new username">
+                    </div>
+                    <div class="setting-item">
+                        <label>Password</label>
+                        <input type="password" id="settingsPassword" placeholder="••••••••">
+                    </div>
+                    <div class="setting-item">
+                        <label>Profile Picture</label>
+                        <div class="large-profile-icon" style="margin-bottom: 10px;"></div>
+                        
+                        <button class="btn-small" onclick="document.getElementById('pfpInput').click()">Upload New Image</button>
+                        
+                        <input type="file" id="pfpInput" accept="image/*" style="display: none;" onchange="handlePFPUpload(event)">
+                    </div>
+                    <div class="beta-notice-box">
+                        <div class="beta-badge">BETA v0.9</div>
+                        <p>You are currently using the <strong>Cinematography Preview</strong> build of Legion Space.</p>
+                        <ul>
+                            <li>Experimental 4K Metadata mapping enabled.</li>
+                            <li>Localized database: Astana/Kazakhstan Region.</li>
+                        </ul>
+                        <p class="beta-small">Some settings are read-only during the hackathon phase.</p>
+                    </div>                    
+                </div>
+                <div class="settings-section">
+                    <h3><i class="icon-paint"></i> Roadmap & Advanced Features</h3>
+                    
+                    <div class="setting-item coming-soon">
+                        <label>Custom Themes</label>
+                        <div class="blurred-preview">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop" alt="Preview">
+                            <div class="blur-overlay"><span>COMING SOON</span></div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item coming-soon" style="margin-top: 15px;">
+                        <label>Cloud Sync (Multi-Device)</label>
+                        <div class="blurred-preview" style="height: 60px; background: #1a1a1a; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 24px;">☁️</span>
+                            <div class="blur-overlay"><span>PLANNED v2.0</span></div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item coming-soon" style="margin-bottom: 0;">
+                        <label>TMDB Global Database</label>
+                        <div class="blurred-preview" style="height: 259px; background: #1a1a1a; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 24px;">🌐</span>
+                            <div class="blur-overlay"><span>API PENDING</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-footer">
+                <button class="btn-save" onclick="saveSettings()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+ <script src="/js/allMovies.js"></script>
+
+<script src="/js/mainPageControls.js"></script>
+</body>
+</html>
