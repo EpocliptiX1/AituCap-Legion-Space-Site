@@ -4,7 +4,7 @@
 
 // 1. GLOBAL CONFIGURATION
 // window.YT_API_KEY = 'CHECK README.md FOR KEY';
-window.YT_API_KEY = 'AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwHfqak';
+window.YT_API_KEY = 'AIzaSyBNWa5OZmYo4eHUJafHnPUXPArLCxbpC8k';
 let currentPlaylist = []; 
 let activeTrailerIdx = -1; 
  

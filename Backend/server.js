@@ -4,7 +4,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 // const fetch = require('node-fetch');
-const YT_API_KEY = 'AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwHfqak';
+const YT_API_KEY = 'AIzaSyBNWa5OZmYo4eHUJafHnPUXPArLCxbpC8k';
 const app = express();
 
 // --- 1. MIDDLEWARE ---
