@@ -6,7 +6,7 @@ let currentSlide = 0;
 
 async function initHero() {
     try {
-        const response = await fetch('http://localhost:3000/movies/library?limit=5&sort=rating_desc');
+        const response = await fetch('/movies/library?limit=5&sort=rating_desc');
         const movies = await response.json();
 
         heroMovies = movies.map(movie => ({
@@ -242,7 +242,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (query.length > 0) {
                 resultsMenu.classList.add('active');
                 try {
-                    const response = await fetch(`http://localhost:3000/search?q=${encodeURIComponent(query)}`);
+                    // Updated line below:
+                    const response = await fetch(`/search?q=${encodeURIComponent(query)}`);
                     const movies = await response.json();
                     renderSearchResults(movies, resultsMenu);
                 } catch (err) {
@@ -253,7 +254,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 resultsMenu.classList.remove('active');
             }
         });
-
         // Enter Key Redirect
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if(display) display.innerText = query;
             
             try {
-                const response = await fetch(`http://localhost:3000/search?q=${encodeURIComponent(query)}`);
+                const response = await fetch(`/search?q=${encodeURIComponent(query)}`);
                 const movies = await response.json();
                 
                 // --- GENERATE HTML ---
@@ -494,7 +494,7 @@ async function fetchRow(containerId, sortType) {
 
     try {
         // Fetch top 20  
-        const res = await fetch(`http://localhost:3000/movies/library?sort=${sortType}&limit=20`);
+        const res = await fetch(`/movies/library?sort=${sortType}&limit=20`);
         const movies = await res.json();
 
         container.innerHTML = movies.map(movie => createCard(movie)).join('');
@@ -529,7 +529,7 @@ async function setupMarquee() {
     if (!marquee) return;
 
     // Fetch random assortment for the background
-    const res = await fetch(`http://localhost:3000/movies/library?limit=20`);
+    const res = await fetch(`/movies/library?limit=20`);
     const movies = await res.json();
 
     // Duplicate list for inf to ensure smooth inf loop
@@ -908,7 +908,7 @@ async function loadReviews() {
     if (!container) return;
 
     try {
-        const res = await fetch('http://localhost:3000/reviews');
+        const res = await fetch('/reviews');
         const reviews = await res.json();
 
         // 1. Create the "Add Review" Card 
@@ -1177,7 +1177,7 @@ window.submitReview = async function() {
     };
 
     try {
-        const res = await fetch('http://localhost:3000/reviews', {
+        const res = await fetch('/reviews', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

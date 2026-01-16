@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (savedIds.length === 0) return; 
 
     try {
-        const response = await fetch('http://localhost:3000/movies/get-list', {
+        const response = await fetch('/movies/get-list', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ids: savedIds })

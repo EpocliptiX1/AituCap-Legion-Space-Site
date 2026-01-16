@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!movieId) return;
 
     try {
-        const response = await fetch(`http://localhost:3000/movie/${movieId}`);
+        const response = await fetch(`/movie/${movieId}`);
         const movie = await response.json();
 
         // HELPERS
@@ -142,14 +142,14 @@ async function initRecommendations(movie, movieYear, firstDirector, starsList) {
     };
 
     // Genre Row
-    fetch(`http://localhost:3000/recommend/genre?genre=${encodeURIComponent(movie.Genre)}&exclude=${movie.ID}`)
+    fetch(`/recommend/genre?genre=${encodeURIComponent(movie.Genre)}&exclude=${movie.ID}`)
         .then(r => r.json()).then(d => renderRow(d, 'genreRow', 'Similar Genre'));
 
     // Director Row
     if (firstDirector) {
         const dirTitle = document.getElementById('directorTitle');
         if(dirTitle) dirTitle.innerText = `More from ${firstDirector}`;
-        fetch(`http://localhost:3000/recommend/director?val=${encodeURIComponent(firstDirector)}&exclude=${movie.ID}`)
+        fetch(`/recommend/director?val=${encodeURIComponent(firstDirector)}&exclude=${movie.ID}`)
             .then(r => r.json()).then(d => renderRow(d, 'directorRow', `Director: ${firstDirector}`));
     }
 
@@ -161,7 +161,7 @@ async function initRecommendations(movie, movieYear, firstDirector, starsList) {
         const fetchActorRow = (name) => {
             const actTitle = document.getElementById('actorTitle');
             if(actTitle) actTitle.innerText = `More from ${name}`;
-            fetch(`http://localhost:3000/recommend/actors?val=${encodeURIComponent(name)}&exclude=${movie.ID}`)
+            fetch(`/recommend/actors?val=${encodeURIComponent(name)}&exclude=${movie.ID}`)
                 .then(r => r.json()).then(d => renderRow(d, 'actorRow', `Starring ${name}`));
         };
 
@@ -171,7 +171,7 @@ async function initRecommendations(movie, movieYear, firstDirector, starsList) {
 
     // Era Row
     if (movieYear) {
-        fetch(`http://localhost:3000/recommend/timeline?year=${movieYear}&exclude=${encodeURIComponent(movie.ID)}`)
+        fetch(`/recommend/timeline?year=${movieYear}&exclude=${encodeURIComponent(movie.ID)}`)
             .then(r => r.json()).then(d => {
                 const eraTitle = document.getElementById('eraTitle');
                 if(eraTitle) eraTitle.innerHTML = `Movies from ${movieYear - 5} - ${movieYear + 5}`;

@@ -75,8 +75,11 @@ async function loadMovies() {
     });
 
     try {
-        console.log("Fetching:", `http://localhost:3000/movies/library?${params}`); // DEBUG URL
-        const response = await fetch(`http://localhost:3000/movies/library?${params}`);
+        // 1. Updated Debug Log
+        console.log("Fetching:", `/movies/library?${params}`); 
+
+        // 2. Updated Fetch Call
+        const response = await fetch(`/movies/library?${params}`);
         
         if (!response.ok) throw new Error("Server Error"); // if server crashes
         
