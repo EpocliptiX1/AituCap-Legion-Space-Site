@@ -4,7 +4,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
-const YT_API_KEY = 'AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwH2fqak';
+const YT_API_KEY = 'AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwHfqak';
 const app = express();
 
 // --- 1. MIDDLEWARE ---
@@ -169,28 +169,36 @@ app.post('/movies/get-list', (req, res) => {
 // =========================================
 app.get('/youtube/search', async (req, res) => {
     const movieName = req.query.name;
-    if (!movieName) return res.status(400).json({ error: "Movie name required" });
-    
+    console.log(`[YouTube Proxy] Searching for: "${movieName}"`);
+
+    if (!movieName || movieName === "undefined") {
+        console.error("[YouTube Proxy] Error: No movie name provided!");
+        return res.status(400).json({ error: "Movie name required" });
+    }
+
     try {
         const query = encodeURIComponent(movieName + " official trailer");
         const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&maxResults=1&type=video&key=${YT_API_KEY}`;
         
-        console.log(`[YouTube] Requesting: ${movieName}`); // Log the attempt
-
         const response = await fetch(url);
         const data = await response.json();
-        
+
+        // THIS IS THE MOST IMPORTANT PART:
+        // It prints the REAL reason for the 400 error to your Render Logs
         if (!response.ok) {
-            // THIS LINE IS THE KEY: It will show the exact error in Render Logs
-            console.error("YouTube API Error Details:", JSON.stringify(data));
+            console.error("--- YOUTUBE API REJECTED REQUEST ---");
+            console.error("Status:", response.status);
+            console.error("Details:", JSON.stringify(data, null, 2));
             return res.status(response.status).json({ error: "YouTube API Error", details: data });
         }
 
         const videoId = data.items?.[0]?.id?.videoId || "";
+        console.log(`[YouTube Proxy] Success! Found videoId: ${videoId}`);
         res.json({ videoId });
+
     } catch (err) {
-        console.error("Server Fetch Error:", err);
-        res.status(500).json({ error: "Could not fetch trailer" });
+        console.error("[YouTube Proxy] System Error:", err.message);
+        res.status(500).json({ error: "Server crashed during fetch" });
     }
 });
 // =========================================
