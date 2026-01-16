@@ -10,14 +10,16 @@ let activeTrailerIdx = -1;
  
 // 2. GLOBAL TRAILER FETCHER (Used by this file AND mainPageControls.js)
 window.fetchYTId = async function(name) {
-    const API_KEY = 'AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwHfqak'; 
-    // const API_KEY = 'CHECK README.md FOR KEY'; 
     try {
-        const query = encodeURIComponent(name + " official trailer");
-        const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&maxResults=1&type=video&key=${API_KEY}`);
+        // We talk to YOUR server, not Google directly
+        const query = encodeURIComponent(name);
+        const res = await fetch(`/youtube/search?name=${query}`);
         const data = await res.json();
-        return data.items?.[0]?.id?.videoId || "";
+        
+        // Your server.js is set up to return { videoId: "..." }
+        return data.videoId || "";
     } catch (e) {
+        console.error("Backend YouTube proxy failed:", e);
         return "";
     }
 }
