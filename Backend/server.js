@@ -170,19 +170,29 @@ app.post('/movies/get-list', (req, res) => {
 app.get('/youtube/search', async (req, res) => {
     const movieName = req.query.name;
     if (!movieName) return res.status(400).json({ error: "Movie name required" });
+    
     try {
         const query = encodeURIComponent(movieName + " official trailer");
         const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&maxResults=1&type=video&key=${YT_API_KEY}`;
+        
+        console.log(`[YouTube] Requesting: ${movieName}`); // Log the attempt
+
         const response = await fetch(url);
         const data = await response.json();
-        if (!response.ok || data.error) return res.status(response.status || 500).json({ error: data.error || "YouTube error" });
+        
+        if (!response.ok) {
+            // THIS LINE IS THE KEY: It will show the exact error in Render Logs
+            console.error("YouTube API Error Details:", JSON.stringify(data));
+            return res.status(response.status).json({ error: "YouTube API Error", details: data });
+        }
+
         const videoId = data.items?.[0]?.id?.videoId || "";
         res.json({ videoId });
     } catch (err) {
+        console.error("Server Fetch Error:", err);
         res.status(500).json({ error: "Could not fetch trailer" });
     }
 });
-
 // =========================================
 //  9. REVIEW ROUTES (JSON File)
 // =========================================
