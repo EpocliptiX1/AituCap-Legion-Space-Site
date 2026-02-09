@@ -1,6 +1,6 @@
 
 # 🎥 Legion Space: Technical Documentation & Architecture
-### !IMPORTANT, USE THIS KEY IN ORDER TO SEE TRAILERS: AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwH2fqak (copy paste into movieLoading.js lines 6 and 12‼️‼️‼️
+ 
 ## 1. Project Overview
 
 **Legion Space** is a full-stack, cinematography-focused movie database and streaming preview platform. Unlike generic movie sites, it focuses on technical presentation (aspect ratios, high-bitrate aesthetics) and a "Premium" user experience.
